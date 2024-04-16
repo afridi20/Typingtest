@@ -45,8 +45,46 @@ pharagraph_list=[' I failed the first quarter of a class in middle school, so I 
 random.shuffle(pharagraph_list)
 
 # craeting a label frame inside phragrafe frame And adding indez 0 string from the pharargraph list  
-Label_paragrape=Label(pharagraph_frame, text=pharagraph_list[0],wraplength=(825),justify=LEFT)
+Label_paragrape=Label(pharagraph_frame, text=pharagraph_list[0],wraplength=(840),justify=LEFT,font=("arial",12,'bold'))
 Label_paragrape.grid()
+
+#creating a frame for text area in mainframe
+textarea_frame=Frame(mainframe)
+textarea_frame.grid(row=2,column=0)
+
+#now adding a texarea in the textarea_fram 
+textarea=Text(textarea_frame,font=('arial', 12,'bold'), width=80,height=15,bd=2,relief=GROOVE,wrap='word',state=DISABLED)
+textarea.grid()
+
+# creating another frame for time in mainframe
+frame_output=Frame(mainframe)
+frame_output.grid(row=3,column=0)
+
+# creating labels that are going to be inside fram_output
+# Label 1
+elapsed_time_label=Label(frame_output,text='Elapsed Time',font=('Tahoma',12,'bold'),fg='blue')
+elapsed_time_label.grid(row=0,column=0,padx=5)
+
+elapsed_timer_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),fg='red')
+elapsed_timer_label.grid(row=0,column=1,padx=5)
+#label 2
+remaining_time_label=Label(frame_output,text='Remaining Time',font=('Tahoma',12,'bold'),fg='blue')
+remaining_time_label.grid(row=0,column=2,padx=5)
+
+remaining_timer_label=Label(frame_output,text='60',font=('Tahoma',12,'bold'),fg='red')
+remaining_timer_label.grid(row=0,column=3,padx=5)
+#label 3
+wpm_label=Label(frame_output,text='WPM',font=('Tahoma',12,'bold'),fg='blue')
+wpm_label.grid(row=0,column=4,padx=5)
+
+wpm_count_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),)
+wpm_count_label.grid(row=0,column=5,padx=5)
+#label 4
+totalword_label=Label(frame_output,text='Total Words',font=('Tahoma',12,'bold'),fg='blue')
+totalword_label.grid(row=0,column=4,padx=5)
+
+totalword_count_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),)
+totalword_count_label.grid(row=0,column=5,padx=5)
 
 
 root.mainloop()
