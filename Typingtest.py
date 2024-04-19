@@ -1,11 +1,15 @@
 # Importing the necessary module 
 from tkinter import * 
 import random
+import ttkthemes
+from tkinter import ttk
+
 
 
 #Creating a root window
-root=Tk()
-
+root=ttkthemes.ThemedTk()
+root.get_themes()
+root.set_theme('radiance')
 # Setting the dimensions and position and making the window non-resizable
 root.geometry('940x735+200+10')
 root.resizable(0,0)
@@ -19,7 +23,7 @@ titleframe=Frame(mainframe,bg='black',bd=4)
 titleframe.grid()
 
 # Adding a title label to the title frame
-titlelabel=Label(titleframe,text='Become a champion',font=('algerian',28,'bold'),bg='darkgoldenrod',fg='white',width=41,bd=4)
+titlelabel=Label(titleframe,text='Become a champion',font=('algerian',28,'bold'),bg='orange',fg='white',width=41,bd=4)
 titlelabel.grid(pady=5)
 
 # Now adding  a pharagraph fram
@@ -56,7 +60,7 @@ textarea_frame.grid(row=2,column=0)
 textarea=Text(textarea_frame,font=('arial', 12,'bold'), width=80,height=15,bd=2,relief=GROOVE,wrap='word',state=DISABLED)
 textarea.grid()
 
-# creating another frame for time in mainframe
+# creating another frame for elapsed time wpm counter and so pn in mainframe
 frame_output=Frame(mainframe)
 frame_output.grid(row=3,column=0)
 
@@ -77,14 +81,51 @@ remaining_timer_label.grid(row=0,column=3,padx=5)
 wpm_label=Label(frame_output,text='WPM',font=('Tahoma',12,'bold'),fg='blue')
 wpm_label.grid(row=0,column=4,padx=5)
 
-wpm_count_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),)
+wpm_count_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),fg='red')
 wpm_count_label.grid(row=0,column=5,padx=5)
 #label 4
 totalword_label=Label(frame_output,text='Total Words',font=('Tahoma',12,'bold'),fg='blue')
-totalword_label.grid(row=0,column=4,padx=5)
+totalword_label.grid(row=0,column=6,padx=5)
 
-totalword_count_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),)
-totalword_count_label.grid(row=0,column=5,padx=5)
+totalword_count_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),fg='red')
+totalword_count_label.grid(row=0,column=7,padx=5)
+
+#label 5
+Wrongword_label=Label(frame_output,text='Total Words',font=('Tahoma',12,'bold'),fg='blue')
+Wrongword_label.grid(row=0,column=8,padx=5)
+
+Wrongword_counter_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),fg='red')
+Wrongword_counter_label.grid(row=0,column=9,padx=5)
+
+# Creating a frame for buttons like reset exit and start 
+Button_frame=Frame(mainframe)
+Button_frame.grid(row=4,column=0)
+ 
+ # Creating buttosn start reset and exeit inside the button_frame   
+Start_button=ttk.Button(Button_frame,text='Start',)
+Start_button.grid(padx=15)
+
+Reset_button=ttk.Button(Button_frame,text='Reset',state=DISABLED)
+Reset_button.grid(row=0,column=1,padx=15)
+
+Exit_button=ttk.Button(Button_frame,text='Exit')
+Exit_button.grid(row=0,column=2,padx=15)
+
+# Now Creating a frame for for keybord
+keyboard_frame=Frame(mainframe)
+keyboard_frame.grid(row=5,column=0)
+
+# creating another frame for keys 1 to 0 inside the keyboard frame and then adding the keys in it seperatly
+key1to0_frame=Frame(keyboard_frame)
+key1to0_frame.grid()
+
+Key_1=Label(key1to0_frame,text='1',bg='black',fg='white',font=('arial',10,'bold'),width=5,height=2,bd=10,relief=GROOVE)
+Key_1.grid()
+
+
+
+
 
 
 root.mainloop()
+
