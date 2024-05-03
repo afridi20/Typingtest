@@ -3,16 +3,93 @@ from tkinter import *
 import random
 import ttkthemes
 from tkinter import ttk
+from time import sleep
+import threading
 
-
-
-#Creating a root window
+# creating a window 
 root=ttkthemes.ThemedTk()
 root.get_themes()
 root.set_theme('radiance')
+root.configure(background='blue')
+
 # Setting the dimensions and position and making the window non-resizable
 root.geometry('940x735+200+10')
 root.resizable(0,0)
+
+
+# defining varible 
+totaltime=60
+time=0
+elapsedtimeinmunit=0
+wrongword=0
+
+#  Funktion to start a timer when called uppon and do certin stuff when it's called uppon 
+def start_timer():
+    Start_button.config(state=DISABLED)
+    global time
+    textarea.config(state=NORMAL)
+    textarea.focus()
+ # creting a Loop to update timer and remaing timer labels
+    for time in range(1,61):
+        elapsed_timer_label.config(text=time) 
+        remainingtimer=totaltime-time   
+        remaining_timer_label.config(text=remainingtimer)
+        sleep(1)
+        root.update()
+    
+    textarea.config(state=DISABLED)  
+
+# Function to count words, calculate statistics, and update labels
+def count():
+    global wrongword
+    while time!=totaltime:
+       written_paragraph=textarea.get(1.0,END).split() # turn the text insid the textarea  into a lsit with index
+       totalword=len(written_paragraph)
+      
+
+    
+       totalword_count_label.config(text=totalword)# updating the  value of totalword_count_label label to valu of totalword
+       paragraph_wordlist=Label_paragrape['text'].split() #  retrieves text Label_paragrape, spliting  into words  and storing them as a list in paragraph_wordlist.
+       Reset_button.config(state=NORMAL)
+   
+   #  comparing words from the 2 list  and counting wrong words  
+    for pair in zip(paragraph_wordlist,written_paragraph):
+         if pair[0]!=pair[1]:
+            wrongword +=1
+
+    
+    Wrongword_counter_label.config(text=wrongword) 
+ # Calculate words per minute (WPM) and update WPM count label
+    elapsedtimeinmunit=time/60
+    wpm=((totalword-wrongword)/elapsedtimeinmunit)
+    wpm_count_label.config(text=wpm)
+    
+# Function to start timer and counting simultaneously using threads
+def start():
+    t1=threading.Thread(target=start_timer)
+    t1.start()
+
+    t2=threading.Thread(target=count)
+    t2.start()
+
+# Function to reset the timer and clear statistics
+def reset():
+    global time,elapsedtimeinmunit
+    time=0
+    elapsedtimeinmunit=0
+    Start_button.config(state=NORMAL)
+    Reset_button.config(state=DISABLED)
+    textarea.config(state=NORMAL)
+    textarea.delete(1.0,END)
+    textarea.config(state=DISABLED)
+
+    elapsed_timer_label.config(text='0')
+    remaining_timer_label.config(text='0')  
+    wpm_count_label.config(text='0')
+    Wrongword_counter_label.config(text='0')
+    totalword_count_label.config(text='0')
+#Creating a root window
+
 
 #creating a  main frame inside wondow and setting border coleeer 
 mainframe=Frame(root,bd=4,)
@@ -91,7 +168,7 @@ totalword_count_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),fg='
 totalword_count_label.grid(row=0,column=7,padx=5)
 
 #label 5
-Wrongword_label=Label(frame_output,text='Total Words',font=('Tahoma',12,'bold'),fg='blue')
+Wrongword_label=Label(frame_output,text='Wrong Words',font=('Tahoma',12,'bold'),fg='blue')
 Wrongword_label.grid(row=0,column=8,padx=5)
 
 Wrongword_counter_label=Label(frame_output,text='0',font=('Tahoma',12,'bold'),fg='red')
@@ -102,13 +179,13 @@ Button_frame=Frame(mainframe)
 Button_frame.grid(row=4,column=0)
  
  # Creating buttosn start reset and exeit inside the button_frame   
-Start_button=ttk.Button(Button_frame,text='Start',)
+Start_button=ttk.Button(Button_frame,text='Start',command=start)
 Start_button.grid(padx=15)
 
-Reset_button=ttk.Button(Button_frame,text='Reset',state=DISABLED)
+Reset_button=ttk.Button(Button_frame,text='Reset',state=DISABLED,command=reset)
 Reset_button.grid(row=0,column=1,padx=15)
 
-Exit_button=ttk.Button(Button_frame,text='Exit')
+Exit_button=ttk.Button(Button_frame,text='Exit',command=root.destroy)
 Exit_button.grid(row=0,column=2,padx=15)
 
 # Now Creating a frame for for keybord
@@ -239,28 +316,37 @@ Spacekey_Frame.grid(row=4,column=0,pady=3)
 Spacekey=Label(Spacekey_Frame,text='Space',bg='black',fg='white',font=('arial',10,'bold'),width=30,height=2,bd=10,relief=GROOVE)
 Spacekey.grid()
 
+#Creating  a  funtion  to cahnge a coloer of a widget  whenever it coalled 
 
 def changeBG(widget):
     widget.config(bg='red')
-    widget.after(500,lambda:widget.config(bg='black'))
-# Binding my keyboard keys with the keys i just created so u can see what key i clivk on 
+    widget.after(100,lambda:widget.config(bg='black'))
+
 
 #NOW creating 3  list and adding all the numbers and alphabets  and space   labels in it 
-NumberzLabel_list=[KeyLabel_1,KeyLabel_2,KeyLabel_3,KeyLabel_4,KeyLabel_5,KeyLabel_6,KeyLabel_7,KeyLabel_8,KeyLabel_9,KeyLabel_0]
-Albhabetslabel_list=[KeyLabel_A,KeyLabel_B,KeyLabel_C,KeyLabel_D,KeyLabel_E,KeyLabel_F,KeyLabel_G,KeyLabel_H,KeyLabel_I,KeyLabel_J,KeyLabel_K,KeyLabel_L,KeyLabel_M,KeyLabel_N,KeyLabel_O,KeyLabel_P,KeyLabel_Q,KeyLabel_R,KeyLabel_S,KeyLabel_T,KeyLabel_U,KeyLabel_V,KeyLabel_W,KeyLabel_Y,KeyLabel_Z,KeyLabel_Å,KeyLabel_Ä,KeyLabel_Ö]
-Space_list=[Spacekey]
+NumberzLabel=[KeyLabel_1,KeyLabel_2,KeyLabel_3,KeyLabel_4,KeyLabel_5,KeyLabel_6,KeyLabel_7,KeyLabel_8,KeyLabel_9,KeyLabel_0]
+Albhabetslabels=[KeyLabel_A,KeyLabel_B,KeyLabel_C,KeyLabel_D,KeyLabel_E,KeyLabel_F,KeyLabel_G,KeyLabel_H,KeyLabel_I,KeyLabel_J,KeyLabel_K,KeyLabel_L,KeyLabel_M,KeyLabel_N,KeyLabel_O,KeyLabel_P,KeyLabel_Q,KeyLabel_R,KeyLabel_S,KeyLabel_T,KeyLabel_U,KeyLabel_V,KeyLabel_W,KeyLabel_Y,KeyLabel_Z,KeyLabel_Å,KeyLabel_Ä,KeyLabel_Ö]
+Spacelabel=[Spacekey]
 
-# now creating  numbers and alphabets that that my labe labove will binded WITH
+# now creating  numbers and alphabets list  to bind with keys
 
 Binding_numbers=['1','2','3','4','5','6','7','8','9','0']
-Binding_alabhabets=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',]
-Bindingcap_alphabet=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Å','Å','Ö'],
+Binding_alabhabets=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+Bindingcap_alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 
+
+#Bind each number key to a label from NumberzLabel list and associate it with changeBG function to cnangge its backgroudn 
 for numbers in range(len(Binding_numbers)):
-    root.bind(Binding_numbers[numbers], lambda event, label=NumberzLabel_list[numbers]: changeBG(label))
+    root.bind(Binding_numbers[numbers], lambda event, label=NumberzLabel[numbers]: changeBG(label))
 
+# Binding each lowercase key to a label from Alphabetslabels list and associating it with changeBG function to cnage its background
+for small_alphabets in range(len(Binding_alabhabets)):
+    root.bind(Binding_alabhabets[small_alphabets], lambda event, label=Albhabetslabels[small_alphabets]: changeBG(label))
 
-for captil_alphabets in range(len(Bindingcap_alphabet)):
-    root.bind(Bindingcap_alphabet[captil_alphabets], lambda event, label=Albhabetslabel_list[captil_alphabets]: changeBG(label))
+# Doing the same as the last one but for uppercase alphabets
+for captital_alphabets in range(len(Bindingcap_alphabet)):
+    root.bind(Bindingcap_alphabet[captital_alphabets], lambda event, label=Albhabetslabels[captital_alphabets]: changeBG(label))
 
+#Binding the space key to the changeBG function with the label from Spacelabel list
+root.bind('<space>', lambda event:changeBG(Spacelabel[0]))
 root.mainloop()
